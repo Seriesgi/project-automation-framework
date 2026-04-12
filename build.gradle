@@ -1,0 +1,72 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.test'
+version = '1.0-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    cucumberVersion = '7.18.1'
+    junitVersion = '5.10.2'
+    seleniumVersion = '4.20.0'
+    restAssuredVersion = '5.4.0'
+    slf4jVersion = '2.0.13'
+}
+
+dependencies {
+    testImplementation platform("org.junit:junit-bom:${junitVersion}")
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.junit.platform:junit-platform-suite'
+    testImplementation "io.cucumber:cucumber-java:${cucumberVersion}"
+    testImplementation "io.cucumber:cucumber-junit-platform-engine:${cucumberVersion}"
+    testImplementation "io.cucumber:cucumber-picocontainer:${cucumberVersion}"
+    testImplementation "org.seleniumhq.selenium:selenium-java:${seleniumVersion}"
+    testImplementation "io.rest-assured:rest-assured:${restAssuredVersion}"
+    testImplementation "org.slf4j:slf4j-simple:${slf4jVersion}"
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.withType(Test).configureEach {
+    useJUnitPlatform()
+    testLogging {
+        events 'passed', 'skipped', 'failed'
+    }
+    systemProperty 'file.encoding', 'UTF-8'
+    reports {
+        html.required = true
+        junitXml.required = true
+    }
+}
+
+test {
+    description = 'Runs all API and Web Cucumber suites.'
+}
+
+tasks.register('apiTest', Test) {
+    group = 'verification'
+    description = 'Execute all cucumber test with @api tag.'
+    useJUnitPlatform()
+    filter {
+        includeTestsMatching 'com.test.runners.ApiTestSuite'
+    }
+}
+
+tasks.register('webTest', Test) {
+    group = 'verification'
+    description = 'Execute all cucumber test with @web tag.'
+    useJUnitPlatform()
+    systemProperty 'headless', System.getProperty('headless', 'true')
+    filter {
+        includeTestsMatching 'com.test.runners.WebTestSuite'
+    }
+}

@@ -1,15 +1,23 @@
 package utils;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class DriverManager {
     private static WebDriver driver;
+    private static final DateTimeFormatter TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss");
 
     private DriverManager() {
     }
@@ -39,6 +47,26 @@ public class DriverManager {
 
     public static WebDriverWait waitForDriver() {
         return new WebDriverWait(driver, Duration.ofSeconds(ConfigManager.getInt("web.timeout.seconds")));
+    }
+
+    public static Path captureScreenshot(String scenarioName) {
+        if (driver == null) {
+            return null;
+        }
+
+        try {
+            Path screenshotDir = Path.of("build", "reports", "screenshots");
+            Files.createDirectories(screenshotDir);
+            String safeScenarioName = scenarioName.replaceAll("[^a-zA-Z0-9-_]", "_");
+            Path screenshotPath = screenshotDir.resolve(
+                    safeScenarioName + "-" + TIMESTAMP_FORMATTER.format(LocalDateTime.now()) + ".png"
+            );
+            byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+            Files.write(screenshotPath, screenshot);
+            return screenshotPath;
+        } catch (IOException exception) {
+            throw new IllegalStateException("Unable to capture screenshot", exception);
+        }
     }
 
     public static void quit() {

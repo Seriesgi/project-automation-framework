@@ -1,6 +1,7 @@
 package stepdefinitions.web;
 
 import io.cucumber.java.After;
+import io.cucumber.java.Scenario;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -40,7 +41,10 @@ public class LoginSteps {
     }
 
     @After("@web")
-    public void tearDown() {
+    public void tearDown(Scenario scenario) {
+        if (scenario.isFailed()) {
+            DriverManager.captureScreenshot(scenario.getName());
+        }
         DriverManager.quit();
     }
 }

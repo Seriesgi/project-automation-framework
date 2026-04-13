@@ -87,3 +87,4 @@ The project targets Java 17 or newer for local runs and CI.
 - API JSON: `build/reports/cucumber/api/cucumber.json`
 - Web HTML: `build/reports/cucumber/web/cucumber.html`
 - Web JSON: `build/reports/cucumber/web/cucumber.json`
+- Failure screenshots: `build/reports/screenshots`

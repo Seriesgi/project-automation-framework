@@ -11,6 +11,7 @@ import utils.BaseApi;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.blankOrNullString;
@@ -31,6 +32,11 @@ public class UserSteps {
     @When("User sends request to get tags")
     public void sendTagsRequest() {
         response = BaseApi.request.get("/tag?limit=" + ConfigManager.get("api.tag.limit"));
+    }
+
+    @When("User sends request for an unknown user")
+    public void sendUnknownUserRequest() {
+        response = BaseApi.request.get("/user/" + ConfigManager.get("api.invalid.user.id"));
     }
 
     @Then("Response status should be {int}")
@@ -56,5 +62,11 @@ public class UserSteps {
     public void validateTagCount(int minimumSize) {
         List<String> tags = response.jsonPath().getList("data");
         assertThat(tags.size(), greaterThanOrEqualTo(minimumSize));
+    }
+
+    @And("Response error message should contain {string}")
+    public void validateErrorMessage(String expectedMessage) {
+        assertThat(response.jsonPath().getString("error"), not(blankOrNullString()));
+        assertThat(response.jsonPath().getString("error"), containsString(expectedMessage));
     }
 }

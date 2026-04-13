@@ -1,8 +1,8 @@
 # Automation Test Framework
 
 ## Tech Stack
-- Java
-- Selenium
+- Java 17+
+- Selenium 4
 - Rest Assured
 - Cucumber
 - Gradle
@@ -13,6 +13,7 @@
 - API Automation using Dummy API
 - Cucumber BDD structure
 - Page Object Model for web flow
+- Config-driven test setup
 - CI execution with GitHub Actions
 
 ## Project Structure
@@ -40,6 +41,7 @@ automation-framework/
         |   |       `-- LoginSteps.java
         |   `-- utils/
         |       |-- BaseApi.java
+        |       |-- ConfigManager.java
         |       `-- DriverManager.java
         `-- resources/
             |-- config/
@@ -71,7 +73,17 @@ Run web tests only:
 ./gradlew webTest
 ```
 
+Override browser mode:
+
+```bash
+./gradlew webTest -Dheadless=false
+```
+
+The project targets Java 17 or newer for local runs and CI.
+
 ## Report
 
-- HTML: `build/reports/cucumber.html`
-- JSON: `build/reports/cucumber.json`
+- API HTML: `build/reports/cucumber/api/cucumber.html`
+- API JSON: `build/reports/cucumber/api/cucumber.json`
+- Web HTML: `build/reports/cucumber/web/cucumber.html`
+- Web JSON: `build/reports/cucumber/web/cucumber.json`

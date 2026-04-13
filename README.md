@@ -1,104 +1,77 @@
-# Final Project Jayjay
+# Automation Test Framework
 
-Automation test framework berbasis Java + Gradle yang menggabungkan Web UI testing dan API testing dalam satu repository. Framework ini menggunakan Cucumber dengan format Gherkin, Selenium untuk Web UI, Rest Assured untuk API, dan GitHub Actions untuk CI.
-
-## Tools dan Library
-
-- Java 17
-- Gradle 8.x
-- Cucumber
-- JUnit 5
-- Selenium WebDriver
+## Tech Stack
+- Java
+- Selenium
 - Rest Assured
+- Cucumber
+- Gradle
 - GitHub Actions
 
-## Target Testing
+## Features
+- Web UI Automation using SauceDemo
+- API Automation using Dummy API
+- Cucumber BDD structure
+- Page Object Model for web flow
+- CI execution with GitHub Actions
 
-- Web UI: [Demoblaze](https://www.demoblaze.com/)
-- API: [Dummy API](https://dummyapi.io/docs)
-
-## Struktur Project
+## Project Structure
 
 ```text
-src/test/java/com/test
-|-- api
-|   |-- client
-|   `-- steps
-|-- runners
-`-- web
-    |-- pages
-    `-- steps
-
-src/test/resources/features
-|-- api
-`-- web
+automation-framework/
+|-- build.gradle
+|-- settings.gradle
+|-- README.md
+|-- .github/
+|   `-- workflows/
+|       `-- automation.yml
+`-- src/
+    `-- test/
+        |-- java/
+        |   |-- pages/
+        |   |   `-- LoginPage.java
+        |   |-- runners/
+        |   |   |-- ApiTestRunner.java
+        |   |   `-- WebTestRunner.java
+        |   |-- stepdefinitions/
+        |   |   |-- api/
+        |   |   |   `-- UserSteps.java
+        |   |   `-- web/
+        |   |       `-- LoginSteps.java
+        |   `-- utils/
+        |       |-- BaseApi.java
+        |       `-- DriverManager.java
+        `-- resources/
+            |-- config/
+            |   `-- config.properties
+            `-- features/
+                |-- api/
+                |   `-- user.feature
+                `-- web/
+                    `-- login.feature
 ```
 
-## Skenario yang Diimplementasikan
+## How to Run
 
-### Web UI
-
-- Melihat produk dari home page
-- Membuka detail produk
-- Menambahkan produk ke cart
-
-### API
-
-- Create User
-- Get User by ID
-- Update User
-- Delete User
-- Get List of Tags
-
-## Cara Menjalankan Test
-
-Jalankan semua dependency terlebih dulu melalui Gradle wrapper:
+Run all tests:
 
 ```bash
 ./gradlew test
 ```
 
-Jalankan hanya API test:
+Run API tests only:
 
 ```bash
 ./gradlew apiTest
 ```
 
-Jalankan hanya Web test:
+Run web tests only:
 
 ```bash
 ./gradlew webTest
 ```
 
-Untuk Windows PowerShell:
-
-```powershell
-.\gradlew.bat apiTest
-.\gradlew.bat webTest
-```
-
-## Konfigurasi Penting
-
-- `DUMMY_API_APP_ID`: optional environment variable untuk override app-id Dummy API.
-- `-Ddummy.api.app.id=<value>`: override app-id via Java system property.
-- `-Dweb.base.url=<value>`: override base URL web test.
-- `-Dapi.base.url=<value>`: override base URL API test.
-- `-Dheadless=true|false`: mode browser untuk web test.
-
 ## Report
 
-Framework menghasilkan report Cucumber dalam format berikut:
-
-- HTML: `build/reports/cucumber/api/cucumber.html`
-- JSON: `build/reports/cucumber/api/cucumber.json`
-- HTML: `build/reports/cucumber/web/cucumber.html`
-- JSON: `build/reports/cucumber/web/cucumber.json`
-
-## GitHub Actions
-
-Workflow CI berada di `.github/workflows/automation-tests.yml` dan akan berjalan pada:
-
-- `workflow_dispatch`
-- `pull_request`
-
-Workflow memisahkan job API test dan Web test, lalu meng-upload artifact report di akhir eksekusi.
+- HTML: `build/reports/cucumber.html`
+- JSON: `build/reports/cucumber.json`

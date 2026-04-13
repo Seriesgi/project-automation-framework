@@ -18,22 +18,24 @@ dependencies {
     testImplementation 'org.seleniumhq.selenium:selenium-java:4.20.0'
     testImplementation 'io.cucumber:cucumber-java:7.18.1'
     testImplementation 'io.cucumber:cucumber-junit-platform-engine:7.18.1'
+    testImplementation 'io.cucumber:cucumber-picocontainer:7.18.1'
     testImplementation 'org.junit.platform:junit-platform-suite:1.10.2'
     testImplementation 'io.rest-assured:rest-assured:5.4.0'
     testImplementation 'org.hamcrest:hamcrest:2.2'
     testImplementation 'io.github.bonigarcia:webdrivermanager:5.7.0'
+    testImplementation 'io.qameta.allure:allure-cucumber7-jvm:2.29.1'
     testRuntimeOnly 'org.slf4j:slf4j-simple:2.0.13'
 }
 
 test {
     useJUnitPlatform()
-    systemProperty "cucumber.plugin", "pretty, html:build/reports/cucumber.html, json:build/reports/cucumber.json"
+    systemProperty "cucumber.plugin", "pretty, html:build/reports/cucumber.html, json:build/reports/cucumber.json, io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"
 }
 
 tasks.register('apiTest', Test) {
     useJUnitPlatform()
     systemProperty "cucumber.filter.tags", "@api"
-    systemProperty "cucumber.plugin", "pretty, html:build/reports/cucumber/api/cucumber.html, json:build/reports/cucumber/api/cucumber.json"
+    systemProperty "cucumber.plugin", "pretty, html:build/reports/cucumber/api/cucumber.html, json:build/reports/cucumber/api/cucumber.json, io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"
     filter {
         includeTestsMatching 'runners.ApiTestRunner'
     }
@@ -42,7 +44,7 @@ tasks.register('apiTest', Test) {
 tasks.register('webTest', Test) {
     useJUnitPlatform()
     systemProperty "cucumber.filter.tags", "@web"
-    systemProperty "cucumber.plugin", "pretty, html:build/reports/cucumber/web/cucumber.html, json:build/reports/cucumber/web/cucumber.json"
+    systemProperty "cucumber.plugin", "pretty, html:build/reports/cucumber/web/cucumber.html, json:build/reports/cucumber/web/cucumber.json, io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"
     systemProperty "headless", System.getProperty("headless", "true")
     filter {
         includeTestsMatching 'runners.WebTestRunner'

@@ -1,7 +1,5 @@
 package stepdefinitions.web;
 
-import io.cucumber.java.After;
-import io.cucumber.java.Scenario;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -19,7 +17,6 @@ public class LoginSteps {
 
     @Given("User is on login page")
     public void openLoginPage() {
-        DriverManager.init();
         loginPage = new LoginPage(DriverManager.getDriver(), DriverManager.waitForDriver());
         loginPage.open(ConfigManager.get("web.base.url"));
     }
@@ -38,13 +35,5 @@ public class LoginSteps {
     @Then("User should see login error message {string}")
     public void verifyLoginError(String expectedMessage) {
         assertThat(loginPage.getErrorMessage(), containsString(expectedMessage));
-    }
-
-    @After("@web")
-    public void tearDown(Scenario scenario) {
-        if (scenario.isFailed()) {
-            DriverManager.captureScreenshot(scenario.getName());
-        }
-        DriverManager.quit();
     }
 }

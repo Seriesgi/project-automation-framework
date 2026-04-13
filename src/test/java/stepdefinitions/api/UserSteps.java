@@ -21,7 +21,7 @@ public class UserSteps {
 
     @Given("User set GET endpoint")
     public void setEndpoint() {
-        BaseApi.setup();
+        assertThat(BaseApi.request, not(org.hamcrest.Matchers.nullValue()));
     }
 
     @When("User send GET request")
